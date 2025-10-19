@@ -92,21 +92,21 @@ iller_ve_ilceler = {
     "Zonguldak": ["Merkez","Alaplı","Çaycuma","Devrek","Ereğli","Gökçebey"]
 }
 
-# ================== SQL Server Bağlantısı ==================
+
 conn = pyodbc.connect(
     "Driver={SQL Server};"
-    "Server=DESKTOP-OBGL57I\\SQLEXPRESS;"  # kendi server adını yaz
+    "Server=\\SQLEXPRESS;" 
     "Database=web_scrap;"
     "Trusted_Connection=yes;"
 )
 cursor = conn.cursor()
 
-# ================== Selenium Ayarları ==================
+
 options = webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-# ================== Duplicate Kontrol ==================
+
 kaydedilenler = set()
 
 def temizle_text(txt):
@@ -124,7 +124,6 @@ def kaydet_veri(isim, adres, phone, il, ilce, kaynak):
     conn.commit()
     print(f"[+] {il} / {ilce} → {isim} eklendi. (Tel: {phone})")
 
-# ================== Google Maps Scraper ==================
 def scrape_google_maps(il, ilce):
     arama_terimi = f"{ilce} {il} petshop"
     print(f"\n=== {il.upper()} - {ilce.upper()} ===")
@@ -204,8 +203,9 @@ try:
             scrape_google_maps(il, ilce)
             print(f"--- {il.upper()} / {ilce.upper()} bitti ---")
 
-    print("\n✅ Tüm il ve ilçeler için scraping tamamlandı.")
+    print("\n Tüm il ve ilçeler için scraping tamamlandı.")
 
 finally:
     driver.quit()
+
     conn.close()
